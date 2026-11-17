@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+#define ll long long
+#define ft first
+#define sc second
+#define el '\n'
+#define boost ios::sync_with_stdio(0); cin.tie(0); cout.tie(0)
+#define file(name) freopen(name".inp", "r", stdin); freopen(name".out", "w", stdout)
+#define pb push_back
+#define all(x) (x).begin(),(x).end()
+using namespace std;
+const ll N = 1e5;
+ll n, gh = 0, a[N + 1];
+bool dp[N + 1];
+void read() {
+    cin >> n;
+    for(ll i = 1; i <= n; i ++) {
+        cin >> a[i];
+        gh += a[i];
+    }
+}
+void solve() {
+    dp[0] = 1;
+
+    for(ll i = 1; i <= n; i ++) {
+        for(ll j = gh; j >= 1; j --) {
+            if(dp[j]) continue;
+            if(j >= a[i] && dp[j - a[i]]) {
+                dp[j] = 1;
+            }
+        }
+    }
+    
+}
+void write() {
+    vector<ll> ans;
+
+    for(ll i = 1; i <= gh; i ++) {
+        if(dp[i]) ans.pb(i);
+    }
+
+    cout << ans.size() << el;
+    for(auto i : ans) {
+        cout << i << ' ';
+    }
+}
+int main() {
+    boost;
+    //file();
+    read();
+    solve();
+    write();
+    return 0;
+}

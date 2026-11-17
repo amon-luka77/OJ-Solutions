@@ -1,0 +1,57 @@
+/*
+    The Fool that doesn't belong to this era;
+    The Mysterious Ruler above the Gray Fog;
+    The King of Yellow and Black who wields good luck
+*/
+#include <bits/stdc++.h>
+#define ll long long
+#define ft first
+#define sc second
+#define el '\n'
+#define FOR(i,a,b) for (ll i = (a), _b = (b); i <= _b; i ++)
+#define FORD(i,b,a) for (ll i = (b), _a = (a); i >= _a; i --)
+#define boost ios::sync_with_stdio(0); cin.tie(0); cout.tie(0)
+#define pb push_back
+#define all(x) (x).begin(),(x).end()
+#define MASK(i) (1LL << (i))
+#define BIT(x, i) (((x) >> (i)) & 1LL)
+#define NAME ""
+using namespace std;
+
+void file() {
+    if(fopen(NAME".inp", "r")) {
+        freopen(NAME".inp", "r", stdin);
+        freopen(NAME".out", "w", stdout);
+    }
+}
+
+const ll N = 1e6;
+ll n, m, mod, ans = 0, a[N + 1];
+
+void read() {
+    cin >> n >> m >> mod;
+    FOR(i, 1, n) cin >> a[i];
+}
+
+void solve() {
+    ll ans = 0;
+    FOR(i, 1, n) FOR(j, i + 1, n) {
+        ll res = 1e18;
+        FOR(x, i, j) FOR(y, x + 1, j) res = min(res, a[x] ^ a[y]);
+        ans += res; if(ans > mod) ans -= mod;
+    }
+    cout << ans;
+}
+
+void write() {
+
+}
+
+int main() {
+    boost;
+    file();
+    read();
+    solve();
+    write();
+    return 0;
+}
