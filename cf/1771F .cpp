@@ -20,13 +20,13 @@ void solve() {
     int lastAns = 0;
 
     struct PersistentSegtree {
-        int numNode = 0;
+        int numNode = 
 
         void updated(int preNode, int l, int r, int i, ll val) {
             int curNode = ++numNode, node[curNOde] = node[preNode];
             if(l == r) {node[curNode] ^= val; return curNode;}
             int mid = (l + r) >> 1;
-            
+
         }
     }
 }
