@@ -19,20 +19,61 @@ void solve() {
 
     int lastAns = 0;
 
-    struct PersistentSegtree {
-        int numNode = 
+    static struct PersistentSegtree {
+        int numNode = 0;
+        int root[N + 1];
 
-        void updated(int preNode, int l, int r, int i, ll val) {
-            int curNode = ++numNode, node[curNOde] = node[preNode];
-            if(l == r) {node[curNode] ^= val; return curNode;}
+        struct NODE {
+            ll val, ls, rs;
+        } node[20 * N + 1];
+
+        int updated(int preNode, int l, int r, int i, ll val) {
+            int curNode = ++numNode; node[curNode] = node[preNode];
+            if(l == r) {node[curNode].val ^= val; return curNode;}
             int mid = (l + r) >> 1;
-
+            if(i <= mid) node[curNode].ls = updated(node[curNode].ls, l, mid, i,  val);
+            else node[curNode].rs = updated(node[curNode].rs, mid + 1, r, i, val);
+            node[curNode].val = node[node[curNode].ls].val ^ node[node[curNode].rs].val;
+            return curNode;
         }
+
+        int get(int rLeft, int rRight, int l, int r) {
+            if(!(node[rRight].val ^ node[rLeft].val)) return 0;
+            if(l == r) return l;
+            ll val = node[node[rRight].ls].val ^ node[node[rLeft].ls].val;
+            int mid = (l + r) >> 1;
+            if(val) return get(node[rLeft].ls, node[rRight].ls, l, mid);
+            return get(node[rLeft].rs, node[rRight].rs, mid + 1, r);
+        }
+    } node;
+
+    mt19937_64 rd(chrono::steady_clock::now().time_since_epoch().count());
+
+    static ll hashVal[N + 1];
+
+    FOR(i, 0, b.size() - 1) hashVal[i + 1] = rd();
+    int maxNode = b.size();
+
+    FOR(i, 1, n) node.root[i] = node.updated(node.root[i - 1], 1, maxNode, a[i], hashVal[a[i]]);
+
+    // FOR(i, 1, n) cerr << hashVal[a[i]] << ' ';
+    // cerr << "\n";
+
+    cin >> q;
+
+    while(q --) {
+        int l, r; cin >> l >> r;
+        l ^= lastAns; r ^= lastAns;
+        // cerr << "query: " << l << ' ' << r << "\n";
+
+        int x = node.get(node.root[l - 1], node.root[r], 1, maxNode);
+        
+        cout << (!x ? lastAns = 0 : lastAns = b[x - 1]) << "\n";
     }
 }
 
 int main() {
-    ios::sync_with_sdtio(0); cin.tie(0);
+    ios::sync_with_stdio(0); cin.tie(0);
 
     int t = 1; 
     // cin >> t;
